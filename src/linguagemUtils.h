@@ -30,7 +30,7 @@ void atualizarValor(char *, char *);
 
 char *obterValor(char *);
 
-void erroAtribuicao(char *);
+void erroAtribuicao(char *, char *);
 
 void erroIdentificadorInexistente(char *);
 
@@ -86,20 +86,6 @@ bool duplicado(char *id) {
 	return false;
 }
 
-/*
-char *obterIdentificador(char *identificadorDeVetor) {
-    char *identificadorExtraido;
-    int i = 0;
-
-    while (identificadorDeVetor[i] != '[') {
-        identificadorExtraido[i] = identificadorDeVetor[i];
-        i++;
-    }
-    identificadorExtraido[i] = '\0';
-
-    return identificadorExtraido;
-}
-*/
 void salvarIdentificador(char *id, char *tipoDeDadosDoIdentificador) {
 	identificadores[noDeIdentificadores].id = id;
 	identificadores[noDeIdentificadores].tipoDeDados = tipoDeDadosDoIdentificador;
@@ -142,17 +128,14 @@ char *obterValor(char *id) {
 	return identificadores[i].valor;
 }
 
-void erroAtribuicao(char *tipoDeDados) {
-	printf("\nERRO NA LINHA %d : \nAtribuicao invalida! O esperado era '%s', mas foi encontrado %s \n", yylineno, TiposDeDados, tipoDeDados);
-	exit(0);
+void erroAtribuicao(char *tipoEsperado, char *tipoDeclarado) {
+	printf("\nERRO NA LINHA %d : \nAtribuicao invalida! O esperado era '%s', mas foi encontrado %s \n", yylineno, tipoEsperado, tipoDeclarado);
 }
 
 void erroIdentificadorInexistente(char *id) {
 	printf("\nERRO NA LINHA %d : \nO identificador não existe %s \n", yylineno, id);
-	exit(0);
 }
 
 void erroIdentificadorDuplicado(char *id) {
 	printf("\nnERRO NA LINHA %d : \nIdentificador duplicado '%s' encontrado.\n", yylineno, id);
-	exit(0);
 }

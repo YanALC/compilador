@@ -20,7 +20,7 @@ extern void salvarIdentificador(char *, char *);
 extern void salvarIdentificadorEValor(char *, char *, char *);
 extern void atualizarValor(char *, char *);
 extern char *obterValor(char *);
-extern void erroAtribuicao(char *);
+extern void erroAtribuicao(char *, char *);
 extern void erroIdentificadorInexistente(char *);
 extern void erroIdentificadorDuplicado(char *);
 bool atribucaoValida(char *);
@@ -65,7 +65,8 @@ char identificadorExtraido[100][100];
 
 %%
 
-LINHA: DECLARACAO
+LINHA: {;}
+| DECLARACAO
 | FUNCAO_PRINT
 | FUNCOES_RESERVADAS
 | LINHA DECLARACAO
@@ -98,7 +99,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 	if(duplicado($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "number") != 0) {
-		erroAtribuicao($1);
+		erroAtribuicao($1, floatToAscii($4));
 	} else {
         salvarIdentificadorEValor($2, $1, floatToAscii($4));
         salvarTipoDeDados($1);
@@ -108,7 +109,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 	if(duplicado($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "number") != 0) {
-		erroAtribuicao($1);
+		erroAtribuicao($1, floatToAscii($4));
 	} else {
         salvarIdentificadorEValor($2, $1, floatToAscii($4));
         salvarTipoDeDados($1);
@@ -118,17 +119,18 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 	if(duplicado($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "text") != 0) {
-		erroAtribuicao($1);
+		erroAtribuicao($1, $4);
 	} else {
         salvarIdentificadorEValor($2, $1, $4);
         salvarTipoDeDados($1);
     }
 }
 | TIPO_DE_DADOS ID IGUAL ID {
+	char *tipoFornecido = obterTipoDeDados($4); 
 	if(duplicado($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if(strcmp($1, obterTipoDeDados($4)) != 0) {
-		erroAtribuicao($1);
+		erroAtribuicao($1, tipoFornecido);
 	} else {
         salvarIdentificadorEValor($2, $1, obterValor($4));
         salvarTipoDeDados($1);
@@ -138,36 +140,36 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 | error '>' {};
 
 ATRIBUICAO: ID IGUAL VALOR_NUMERICO {
-	char *tipoDeDados = obterTipoDeDados($1);
-	char *number = "number";
-	if(strcmp(tipoDeDados, number) == 0) {
+	char *tipoEsperado = obterTipoDeDados($1);
+	if(strcmp(tipoEsperado, "number") == 0) {
     	atualizarValor($1, floatToAscii($3)); 
 	} else {
-		erroAtribuicao(tipoDeDados);
+		erroAtribuicao(tipoEsperado, floatToAscii($3));
 	}
 }
 | ID IGUAL VALOR_TEXTUAL {
-	char *tipoDeDados = obterTipoDeDados($1);
-	char *text = "text";
-	if(strcmp(tipoDeDados, text) == 0) {
+	char *tipoEsperado = obterTipoDeDados($1);
+	if(strcmp(tipoEsperado, "text") == 0) {
     	atualizarValor($1, $3); 
 	} else {
-		erroAtribuicao(tipoDeDados);
+		erroAtribuicao(tipoEsperado, $3);
 	}
 }
 | ID IGUAL EXPRESSAO_NUMERICA {
-	char *tipoDeDados = obterTipoDeDados($1);
-	if(strcmp(tipoDeDados, "number") == 0) {
+	char *tipoEsperado = obterTipoDeDados($1);
+	if(strcmp(tipoEsperado, "number") == 0) {
     	atualizarValor($1, floatToAscii($3)); 
 	} else {
-		erroAtribuicao(tipoDeDados);
+		erroAtribuicao(tipoEsperado, floatToAscii($3));
 	}
 }
 | ID IGUAL ID {
+	char *tipoEsperado = obterTipoDeDados($1); 
+	char *tipoFornecido = obterTipoDeDados($3); 
 	if(strcmp(obterTipoDeDados($1), obterTipoDeDados($3)) == 0) {
     	atualizarValor($1, obterValor($3)); 
 	} else {
-		erroAtribuicao(obterTipoDeDados($3));
+		erroAtribuicao(tipoEsperado, tipoFornecido);
 	}
 };
 
@@ -181,8 +183,8 @@ CLAUSULA_IF: IF ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES ABRE_CHAVE LINHA FECH
 
 LISTA_VARS: ATRIBUICAO
 | EXPRESSAO
-| EXPRESSAO VIRGULA EXPRESSAO
-| ATRIBUICAO VIRGULA ATRIBUICAO;
+| LISTA_VARS VIRGULA EXPRESSAO
+| LISTA_VARS VIRGULA ATRIBUICAO;
 
 TOKENS: ID { $$ = obterValor($1); }
 | VALOR_NUMERICO { $$ = floatToAscii($1); }
@@ -192,12 +194,13 @@ TOKENS: ID { $$ = obterValor($1); }
 OP_LOGICA: TOKENS IGUAL_IGUAL TOKENS
 | TOKENS DIFERENTE TOKENS 
 | TOKENS MAIOR TOKENS 
+| TOKENS MENOR TOKENS 
 | TOKENS MAIOR_IGUAL TOKENS 
 | TOKENS MENOR_IGUAL TOKENS
-| OP_LOGICA IGUAL_IGUAL OP_LOGICA;
-| OP_LOGICA DIFERENTE OP_LOGICA;
-| OP_LOGICA AND OP_LOGICA;
-| OP_LOGICA OR OP_LOGICA;
+| ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES IGUAL_IGUAL ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES
+| ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES DIFERENTE ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES
+| ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES AND ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES
+| ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES OR ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES;
 
 EXPRESSAO_NUMERICA: VALOR_NUMERICO SOMA VALOR_NUMERICO { $$ = $1 + $3; }
 | VALOR_NUMERICO SUBTRACAO VALOR_NUMERICO { $$ = $1 - $3; }
@@ -206,12 +209,12 @@ EXPRESSAO_NUMERICA: VALOR_NUMERICO SOMA VALOR_NUMERICO { $$ = $1 + $3; }
 
 VALOR: VALOR_NUMERICO {
     if(!atribucaoValida("number")) {
-        erroAtribuicao(floatToAscii($1));
+        erroAtribuicao("number", floatToAscii($1));
     }
 }
 | VALOR_TEXTUAL {
     if(!atribucaoValida("text")) {
-        erroAtribuicao($1);
+        erroAtribuicao("text", $1);
     }
 };
 
