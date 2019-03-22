@@ -12,7 +12,8 @@
 `bison -d compilador.y`
 `flex compilador.l`
 `gcc lex.yy.c compilador.tab.c -o compilador`
-### Para rodar o comando é: `.\compilador.exe` ou `.\compilador`
+### Para rodar o comando é: `.\compilador.exe` ou `.\compilador`.
+- Se for rodar com arquivo o comando é o seguinte: `type arquivo.txt | .\compilador.exe`
 
 ## Tipos de dados: `number` e `text`
 ## Comando de print: `print <var | op_aritmetica | literal>;`
