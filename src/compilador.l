@@ -6,7 +6,7 @@
     void TokenInvalido();
 %}
 
-espaco			[ \s\t\r\v\f]
+espaco			[ \s\t\r\v\f]+
 quebraDeLinha	\n
 
 %%
@@ -30,7 +30,15 @@ text	{
 "}"				{ return FECHA_CHAVE; }
 "["				{ return ABRE_COLCHETE; }
 "]"				{ return FECHA_COLCHETE; }
-
+"&&"			{ return AND; }
+"OR"			{ return OR; }
+"=="			{ return IGUAL_IGUAL; }
+"!="			{ return DIFERENTE; }
+"!"				{ return NEGACAO; }
+"<"				{ return MENOR; }
+"<="			{ return MENOR_IGUAL; }
+">"				{ return MAIOR; }
+">="			{ return MAIOR_IGUAL; }
 "if"			{ return IF; }
 "else"			{ return ELSE; }
 "for"			{ return FOR; }
@@ -38,7 +46,7 @@ text	{
 "print" 		{ return PRINT; }
 "exit"			{ return SAIR; }
 
-[-+]?[0-9]*\.?[0-9]+	{
+[0-9]*\.?[0-9]+ {
 	yylval.numVal = atof(yytext); 
 	return VALOR_NUMERICO;
 }
@@ -53,8 +61,10 @@ text	{
 	return ID;
 }
 
+(\+\+)|(\-\-)			{ return INC_DEC; }
+
 {quebraDeLinha}			{ yylineno++; }
-{espaco}				;
+{espaco}+				
 .						{ TokenInvalido(); }
 
 %%

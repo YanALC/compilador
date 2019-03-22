@@ -16,6 +16,8 @@ void salvarTipoDeDados(const char *);
 
 char *obterTiposDeDados();
 
+char *obterTipoDeDados(char *);
+
 bool duplicado(char *);
 
 char *obterIdentificador(char *);
@@ -62,6 +64,19 @@ char *obterTiposDeDados() {
 	return TiposDeDados;
 }
 
+char *obterTipoDeDados(char *id) {
+	int i;
+	for (i = 0; i < noDeIdentificadores; i++) {
+		if (strcmp(id, identificadores[i].id) == 0) {
+			break;
+		}
+		if (i == noDeIdentificadores-1 && strcmp(id, identificadores[i].id) != 0) {
+			erroIdentificadorInexistente(id);
+		}
+	}
+	return identificadores[i].tipoDeDados;
+}
+
 bool duplicado(char *id) {
 	for (int i = 0; i < noDeIdentificadores; i++) {
 		if (strcmp(id, identificadores[i].id) == 0) {
@@ -101,33 +116,34 @@ void salvarIdentificadorEValor(char *id, char *tipoDeDadosDoIdentificador, char 
 }
 
 void atualizarValor(char *id, char *valor) {
-	int idx;
-	for (idx = 0; idx < sizeof(identificadores); idx++) {
-		if (identificadores[idx].id == id) {
+	int i;
+	for (i = 0; i < noDeIdentificadores; i++) {
+		if (strcmp(id, identificadores[i].id) == 0) {
+			break;
+		}
+		if (i == noDeIdentificadores-1 && strcmp(id, identificadores[i].id) != 0) {
+			erroIdentificadorInexistente(id);
 			return;
 		}
-		if (idx == sizeof(identificadores) - 1 && identificadores[idx].id != id) {
-			erroIdentificadorInexistente(id);
-		}
 	}
-	identificadores[idx].valor = valor;
+	identificadores[i].valor = valor;
 }
 
 char *obterValor(char *id) {
-	int idx;
-	for (idx = 0; idx < sizeof(identificadores); idx++) {
-		if (identificadores[idx].id == id) {
+	int i;
+	for (i = 0; i < noDeIdentificadores; i++) {
+		if (strcmp(id, identificadores[i].id) == 0) {
 			break;
 		}
-		if (idx == sizeof(identificadores) - 1 && identificadores[idx].id != id) {
+		if (i == noDeIdentificadores-1 && strcmp(id, identificadores[i].id) != 0) {
 			erroIdentificadorInexistente(id);
 		}
 	}
-	return identificadores[idx].valor;
+	return identificadores[i].valor;
 }
 
 void erroAtribuicao(char *tipoDeDados) {
-	printf("\nERRO NA LINHA %d : \nAtribuição inválida! O esperado era '%s', mas foi encontrado %s \n", yylineno, TiposDeDados, tipoDeDados);
+	printf("\nERRO NA LINHA %d : \nAtribuicao invalida! O esperado era '%s', mas foi encontrado %s \n", yylineno, TiposDeDados, tipoDeDados);
 	exit(0);
 }
 

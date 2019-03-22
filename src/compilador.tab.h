@@ -43,45 +43,57 @@ extern int yydebug;
 /* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-enum yytokentype {
-	VIRGULA = 258,
-	APOSTROFE = 259,
-	PONTO_VIRGULA = 260,
-	IGUAL = 261,
-	SOMA = 262,
-	SUBTRACAO = 263,
-	DIVISAO = 264,
-	MULTIPLICACAO = 265,
-	ABRE_PARENTESES = 266,
-	FECHA_PARENTESES = 267,
-	ABRE_CHAVE = 268,
-	FECHA_CHAVE = 269,
-	ABRE_COLCHETE = 270,
-	FECHA_COLCHETE = 271,
-	IF = 272,
-	ELSE = 273,
-	WHILE = 274,
-	FOR = 275,
-	PRINT = 276,
-	SAIR = 277,
-	VALOR_NUMERICO = 278,
-	VALOR_TEXTUAL = 279,
-	TIPO_DE_DADOS = 280,
-	ID = 281
-};
+  enum yytokentype
+  {
+    VIRGULA = 258,
+    APOSTROFE = 259,
+    PONTO_VIRGULA = 260,
+    IGUAL = 261,
+    SOMA = 262,
+    SUBTRACAO = 263,
+    DIVISAO = 264,
+    MULTIPLICACAO = 265,
+    INC_DEC = 266,
+    IGUAL_IGUAL = 267,
+    DIFERENTE = 268,
+    NEGACAO = 269,
+    MENOR = 270,
+    MAIOR = 271,
+    MENOR_IGUAL = 272,
+    MAIOR_IGUAL = 273,
+    AND = 274,
+    OR = 275,
+    ABRE_PARENTESES = 276,
+    FECHA_PARENTESES = 277,
+    ABRE_CHAVE = 278,
+    FECHA_CHAVE = 279,
+    ABRE_COLCHETE = 280,
+    FECHA_COLCHETE = 281,
+    IF = 282,
+    ELSE = 283,
+    WHILE = 284,
+    FOR = 285,
+    PRINT = 286,
+    SAIR = 287,
+    VALOR_NUMERICO = 288,
+    VALOR_TEXTUAL = 289,
+    TIPO_DE_DADOS = 290,
+    ID = 291
+  };
 #endif
 
 /* Value type.  */
-#if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
-union YYSTYPE {
-#line 36 "compilador.y" /* yacc.c:1910  */
-	
+union YYSTYPE
+{
+#line 37 "compilador.y" /* yacc.c:1910  */
+
 	float numVal;
 	char *tipoDeDados;
 	char *txtVal;
 
-#line 87 "compilador.tab.h" /* yacc.c:1910  */
+#line 97 "compilador.tab.h" /* yacc.c:1910  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -92,6 +104,6 @@ typedef union YYSTYPE YYSTYPE;
 
 extern YYSTYPE yylval;
 
-int yyparse(void);
+int yyparse (void);
 
 #endif /* !YY_YY_COMPILADOR_TAB_H_INCLUDED  */
