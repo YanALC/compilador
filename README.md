@@ -15,7 +15,7 @@
 ### Para rodar o comando é: `.\compilador.exe` ou `.\compilador`
 
 ## Tipos de dados: `number` e `text`
-## Comando de print: `print <var>;`
+## Comando de print: `print <var | op_aritmetica | literal>;`
 ## Parser reconhece:
 - if
 - else
