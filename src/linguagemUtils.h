@@ -129,7 +129,7 @@ char *obterValor(char *id) {
 }
 
 void erroAtribuicao(char *tipoEsperado, char *tipoDeclarado) {
-	printf("\nERRO NA LINHA %d : \nAtribuicao invalida! O esperado era '%s', mas foi encontrado %s \n", yylineno, tipoEsperado, tipoDeclarado);
+	printf("\nERRO NA LINHA %d : \nAtribuicao invalida! O tipo esperado eh '%s', mas o valor encontrado eh do tipo '%s' \n", yylineno, tipoEsperado, tipoDeclarado);
 }
 
 void erroIdentificadorInexistente(char *id) {

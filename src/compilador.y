@@ -73,6 +73,7 @@ LINHA: {;}
 | LINHA FUNCAO_PRINT
 | LINHA FUNCOES_RESERVADAS
 | SAIR PONTO_VIRGULA { exit(EXIT_SUCCESS); };
+| LINHA SAIR PONTO_VIRGULA { exit(EXIT_SUCCESS); };
 
 FUNCAO_PRINT: PRINT ID PONTO_VIRGULA { printf("%s \n", obterValor($2)); }
 | PRINT EXPRESSAO_NUMERICA PONTO_VIRGULA { printf("%s \n", floatToAscii($2)); }
@@ -99,7 +100,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 	if(duplicado($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "number") != 0) {
-		erroAtribuicao($1, floatToAscii($4));
+		erroAtribuicao($1, "number");
 	} else {
         salvarIdentificadorEValor($2, $1, floatToAscii($4));
         salvarTipoDeDados($1);
@@ -109,7 +110,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 	if(duplicado($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "number") != 0) {
-		erroAtribuicao($1, floatToAscii($4));
+		erroAtribuicao($1, "number");
 	} else {
         salvarIdentificadorEValor($2, $1, floatToAscii($4));
         salvarTipoDeDados($1);
@@ -119,7 +120,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 	if(duplicado($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "text") != 0) {
-		erroAtribuicao($1, $4);
+		erroAtribuicao($1, "text");
 	} else {
         salvarIdentificadorEValor($2, $1, $4);
         salvarTipoDeDados($1);
@@ -144,7 +145,7 @@ ATRIBUICAO: ID IGUAL VALOR_NUMERICO {
 	if(strcmp(tipoEsperado, "number") == 0) {
     	atualizarValor($1, floatToAscii($3)); 
 	} else {
-		erroAtribuicao(tipoEsperado, floatToAscii($3));
+		erroAtribuicao(tipoEsperado, "number");
 	}
 }
 | ID IGUAL VALOR_TEXTUAL {
@@ -152,7 +153,7 @@ ATRIBUICAO: ID IGUAL VALOR_NUMERICO {
 	if(strcmp(tipoEsperado, "text") == 0) {
     	atualizarValor($1, $3); 
 	} else {
-		erroAtribuicao(tipoEsperado, $3);
+		erroAtribuicao(tipoEsperado, "text");
 	}
 }
 | ID IGUAL EXPRESSAO_NUMERICA {
@@ -160,7 +161,7 @@ ATRIBUICAO: ID IGUAL VALOR_NUMERICO {
 	if(strcmp(tipoEsperado, "number") == 0) {
     	atualizarValor($1, floatToAscii($3)); 
 	} else {
-		erroAtribuicao(tipoEsperado, floatToAscii($3));
+		erroAtribuicao(tipoEsperado, "number");
 	}
 }
 | ID IGUAL ID {
@@ -221,7 +222,7 @@ VALOR: VALOR_NUMERICO {
 LISTA_DE_PARAMETROS: ID
 | VALOR
 | LISTA_DE_PARAMETROS VIRGULA VALOR
-| VALOR IGUAL VALOR { yyerror("Erro: atribuindo um numero a outro"); }
+| VALOR IGUAL VALOR { yyerror("Erro: atribuindo um valor a outro"); }
 | error '>' {};
 
 FUNCAO_DECLARACAO: TIPO_DE_DADOS ID ABRE_PARENTESES LISTA_DE_TIPOS_DE_DADOS FECHA_PARENTESES {
