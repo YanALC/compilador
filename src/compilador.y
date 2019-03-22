@@ -67,12 +67,10 @@ char identificadorExtraido[100][100];
 
 LINHA: {;}
 | DECLARACAO
-| ATRIBUICAO PONTO_VIRGULA
 | FUNCAO_PRINT
 | FUNCOES_RESERVADAS
 | SAIR PONTO_VIRGULA { exit(EXIT_SUCCESS); }
 | LINHA DECLARACAO
-| LINHA ATRIBUICAO PONTO_VIRGULA
 | LINHA FUNCAO_PRINT
 | LINHA FUNCOES_RESERVADAS
 | LINHA SAIR PONTO_VIRGULA { exit(EXIT_SUCCESS); }
@@ -83,11 +81,13 @@ FUNCAO_PRINT: PRINT ID PONTO_VIRGULA { printf("%s \n", obterValor($2)); }
 | PRINT VALOR_NUMERICO PONTO_VIRGULA { printf("%s \n", floatToAscii($2)); }
 | PRINT VALOR_TEXTUAL PONTO_VIRGULA { printf("%s \n", $2); };
 
-DECLARACAO: EXPRESSAO PONTO_VIRGULA { limparTiposDeDados(); }
-| FUNCAO_DECLARACAO PONTO_VIRGULA
-| DECLARACAO EXPRESSAO PONTO_VIRGULA { limparTiposDeDados(); }
-| DECLARACAO FUNCAO_DECLARACAO PONTO_VIRGULA
-| error '>' {};
+DECLARACAO: EXPRESSAO PONTO_VIRGULA {;}
+| ATRIBUICAO PONTO_VIRGULA {;}
+| FUNCAO_DECLARACAO PONTO_VIRGULA {;}
+| DECLARACAO EXPRESSAO PONTO_VIRGULA {;}
+| DECLARACAO ATRIBUICAO PONTO_VIRGULA {;}
+| DECLARACAO FUNCAO_DECLARACAO PONTO_VIRGULA {;}
+| error '>' {;};
 
 EXPRESSAO: TIPO_DE_DADOS ID {
 	if (!existeId($2)) {
@@ -104,7 +104,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 		erroAtribuicao($1, "number");
 	} else {
         salvarIdentificadorEValor($2, $1, floatToAscii($4));
-        salvarTipoDeDados($1);
+    //    salvarTipoDeDados($1);
     }
 }
 | TIPO_DE_DADOS ID IGUAL EXPRESSAO_NUMERICA {
@@ -114,7 +114,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 		erroAtribuicao($1, "number");
 	} else {
         salvarIdentificadorEValor($2, $1, floatToAscii($4));
-        salvarTipoDeDados($1);
+    //    salvarTipoDeDados($1);
     }
 }
 | TIPO_DE_DADOS ID IGUAL VALOR_TEXTUAL {
@@ -124,7 +124,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 		erroAtribuicao($1, "text");
 	} else {
         salvarIdentificadorEValor($2, $1, $4);
-        salvarTipoDeDados($1);
+    //    salvarTipoDeDados($1);
     }
 }
 | TIPO_DE_DADOS ID IGUAL ID {
@@ -135,11 +135,11 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 		erroAtribuicao($1, tipoFornecido);
 	} else {
         salvarIdentificadorEValor($2, $1, obterValor($4));
-        salvarTipoDeDados($1);
+    //    salvarTipoDeDados($1);
     }
 }
 | EXPRESSAO IGUAL ABRE_CHAVE LISTA_DE_PARAMETROS FECHA_CHAVE
-| error '>' {};
+| error '>' {;};
 
 ATRIBUICAO: ID IGUAL VALOR_NUMERICO {
 	if (!existeId($1)) {
@@ -201,8 +201,8 @@ FUNCOES_RESERVADAS: CLAUSULA_IF
 
 CLAUSULA_IF: IF ABRE_PARENTESES OP_LOGICA FECHA_PARENTESES ABRE_CHAVE LINHA FECHA_CHAVE;
 
-LISTA_VARS: ATRIBUICAO
-| EXPRESSAO
+LISTA_VARS: EXPRESSAO
+| ATRIBUICAO
 | LISTA_VARS VIRGULA EXPRESSAO
 | LISTA_VARS VIRGULA ATRIBUICAO;
 

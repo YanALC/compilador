@@ -1,0 +1,20 @@
+text a="Iniciando interpretacao do codigo";
+print a;
+a="Printando alguns numeros";
+print a;
+number b=3;
+print b;
+number c=1;
+print c;
+a="Testando erro de sintaxe no IF";
+print a;
+if(3!=7){
+
+}
+a="Testando sintaxe no WHILE";
+print a;
+while(1==1){
+	a="Finalizando teste";
+	print a;
+}
+exit;

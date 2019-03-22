@@ -973,7 +973,7 @@ YY_RULE_SETUP
 case 37:
 YY_RULE_SETUP
 #line 67 "compilador.l"
-
+{;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP

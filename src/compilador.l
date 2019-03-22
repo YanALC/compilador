@@ -64,7 +64,7 @@ text	{
 (\+\+)|(\-\-)			{ return INC_DEC; }
 
 {quebraDeLinha}			{ yylineno++; }
-{espaco}+				
+{espaco}				{;}
 .						{ TokenInvalido(); }
 
 %%
