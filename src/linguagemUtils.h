@@ -22,7 +22,7 @@ char *obterIdentificador(char *);
 
 void salvarIdentificador(char *, char *);
 
-void salvarIdentificador(char *, char *, char *);
+void salvarIdentificadorEValor(char *, char *, char *);
 
 void atualizarValor(char *, char *);
 
@@ -92,7 +92,7 @@ void salvarIdentificador(char *id, char *tipoDeDadosDoIdentificador) {
 	noDeIdentificadores++;
 }
 
-void salvarIdentificador(char *id, char *tipoDeDadosDoIdentificador, char *valor) {
+void salvarIdentificadorEValor(char *id, char *tipoDeDadosDoIdentificador, char *valor) {
 	identificadores[noDeIdentificadores].id = id;
 	identificadores[noDeIdentificadores].tipoDeDados = tipoDeDadosDoIdentificador;
 	identificadores[noDeIdentificadores].valor = valor;
@@ -117,7 +117,7 @@ char *obterValor(char *id) {
 	int idx;
 	for (idx = 0; idx < sizeof(identificadores); idx++) {
 		if (identificadores[idx].id == id) {
-			return;
+			break;
 		}
 		if (idx == sizeof(identificadores) - 1 && identificadores[idx].id != id) {
 			erroIdentificadorInexistente(id);

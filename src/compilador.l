@@ -1,7 +1,7 @@
 %{
     #include <string.h>
     #include <stdlib.h>
-    #include "../yacc/compilador.tab.h"
+    #include "compilador.tab.h"
     void extern yyerror(char *);
     void TokenInvalido();
 %}

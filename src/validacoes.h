@@ -1,6 +1,6 @@
 #include <string.h>
 #include <stdbool.h>
-#include "../yacc/compilador.tab.h"
+#include "compilador.tab.h"
 
 bool atribucaoValida(char *tipoDeDados) {
 	return strcmp(tipoDeDados, TiposDeDados) == 0;

@@ -48,18 +48,26 @@ enum yytokentype {
 	APOSTROFE = 259,
 	PONTO_VIRGULA = 260,
 	IGUAL = 261,
-	ABRE_PARENTESES = 262,
-	FECHA_PARENTESES = 263,
-	ABRE_CHAVE = 264,
-	FECHA_CHAVE = 265,
-	ABRE_COLCHETE = 266,
-	FECHA_COLCHETE = 267,
-	PRINT = 268,
-	SAIR = 269,
-	VALOR_NUMERICO = 270,
-	VALOR_TEXTUAL = 271,
-	TIPO_DE_DADOS = 272,
-	ID = 273
+	SOMA = 262,
+	SUBTRACAO = 263,
+	DIVISAO = 264,
+	MULTIPLICACAO = 265,
+	ABRE_PARENTESES = 266,
+	FECHA_PARENTESES = 267,
+	ABRE_CHAVE = 268,
+	FECHA_CHAVE = 269,
+	ABRE_COLCHETE = 270,
+	FECHA_COLCHETE = 271,
+	IF = 272,
+	ELSE = 273,
+	WHILE = 274,
+	FOR = 275,
+	PRINT = 276,
+	SAIR = 277,
+	VALOR_NUMERICO = 278,
+	VALOR_TEXTUAL = 279,
+	TIPO_DE_DADOS = 280,
+	ID = 281
 };
 #endif
 
@@ -67,13 +75,13 @@ enum yytokentype {
 #if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE {
-#line 30 "compilador.y" /* yacc.c:1910  */
+#line 36 "compilador.y" /* yacc.c:1910  */
 	
-	double numVal;
+	float numVal;
 	char *tipoDeDados;
 	char *txtVal;
 
-#line 79 "compilador.tab.h" /* yacc.c:1910  */
+#line 87 "compilador.tab.h" /* yacc.c:1910  */
 };
 
 typedef union YYSTYPE YYSTYPE;
