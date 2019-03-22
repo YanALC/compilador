@@ -18,7 +18,7 @@ char *obterTiposDeDados();
 
 char *obterTipoDeDados(char *);
 
-bool duplicado(char *);
+bool existeId(char *);
 
 char *obterIdentificador(char *);
 
@@ -70,14 +70,11 @@ char *obterTipoDeDados(char *id) {
 		if (strcmp(id, identificadores[i].id) == 0) {
 			break;
 		}
-		if (i == noDeIdentificadores-1 && strcmp(id, identificadores[i].id) != 0) {
-			erroIdentificadorInexistente(id);
-		}
 	}
 	return identificadores[i].tipoDeDados;
 }
 
-bool duplicado(char *id) {
+bool existeId(char *id) {
 	for (int i = 0; i < noDeIdentificadores; i++) {
 		if (strcmp(id, identificadores[i].id) == 0) {
 			return true;
@@ -133,9 +130,9 @@ void erroAtribuicao(char *tipoEsperado, char *tipoDeclarado) {
 }
 
 void erroIdentificadorInexistente(char *id) {
-	printf("\nERRO NA LINHA %d : \nO identificador não existe %s \n", yylineno, id);
+	printf("\nERRO NA LINHA %d : \nIdentificador '%s' nao existe.\n", yylineno, id);
 }
 
 void erroIdentificadorDuplicado(char *id) {
-	printf("\nnERRO NA LINHA %d : \nIdentificador duplicado '%s' encontrado.\n", yylineno, id);
+	printf("\nnERRO NA LINHA %d : \nIdentificador '%s' ja existente.\n", yylineno, id);
 }

@@ -14,7 +14,7 @@ extern void limparTiposDeDados();
 extern void salvarTipoDeDados(const char *);
 extern char *obterTiposDeDados();
 extern char *obterTipoDeDados(char *);
-extern bool duplicado(char *);
+extern bool existeId(char *);
 extern char *obterIdentificador(char []);
 extern void salvarIdentificador(char *, char *);
 extern void salvarIdentificadorEValor(char *, char *, char *);
@@ -67,13 +67,16 @@ char identificadorExtraido[100][100];
 
 LINHA: {;}
 | DECLARACAO
+| ATRIBUICAO PONTO_VIRGULA
 | FUNCAO_PRINT
 | FUNCOES_RESERVADAS
+| SAIR PONTO_VIRGULA { exit(EXIT_SUCCESS); }
 | LINHA DECLARACAO
+| LINHA ATRIBUICAO PONTO_VIRGULA
 | LINHA FUNCAO_PRINT
 | LINHA FUNCOES_RESERVADAS
-| SAIR PONTO_VIRGULA { exit(EXIT_SUCCESS); };
-| LINHA SAIR PONTO_VIRGULA { exit(EXIT_SUCCESS); };
+| LINHA SAIR PONTO_VIRGULA { exit(EXIT_SUCCESS); }
+| error '>' {};
 
 FUNCAO_PRINT: PRINT ID PONTO_VIRGULA { printf("%s \n", obterValor($2)); }
 | PRINT EXPRESSAO_NUMERICA PONTO_VIRGULA { printf("%s \n", floatToAscii($2)); }
@@ -81,15 +84,13 @@ FUNCAO_PRINT: PRINT ID PONTO_VIRGULA { printf("%s \n", obterValor($2)); }
 | PRINT VALOR_TEXTUAL PONTO_VIRGULA { printf("%s \n", $2); };
 
 DECLARACAO: EXPRESSAO PONTO_VIRGULA { limparTiposDeDados(); }
-| ATRIBUICAO PONTO_VIRGULA {;}
 | FUNCAO_DECLARACAO PONTO_VIRGULA
 | DECLARACAO EXPRESSAO PONTO_VIRGULA { limparTiposDeDados(); }
-| DECLARACAO ATRIBUICAO PONTO_VIRGULA {;}
 | DECLARACAO FUNCAO_DECLARACAO PONTO_VIRGULA
 | error '>' {};
 
 EXPRESSAO: TIPO_DE_DADOS ID {
-	if (!duplicado($2)) {
+	if (!existeId($2)) {
     	salvarIdentificador($2, $1);
         salvarTipoDeDados($1);
     } else {
@@ -97,7 +98,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
     }
 }
 | TIPO_DE_DADOS ID IGUAL VALOR_NUMERICO {
-	if(duplicado($2)) {
+	if(existeId($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "number") != 0) {
 		erroAtribuicao($1, "number");
@@ -107,7 +108,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
     }
 }
 | TIPO_DE_DADOS ID IGUAL EXPRESSAO_NUMERICA {
-	if(duplicado($2)) {
+	if(existeId($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "number") != 0) {
 		erroAtribuicao($1, "number");
@@ -117,7 +118,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
     }
 }
 | TIPO_DE_DADOS ID IGUAL VALOR_TEXTUAL {
-	if(duplicado($2)) {
+	if(existeId($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if (strcmp($1, "text") != 0) {
 		erroAtribuicao($1, "text");
@@ -128,7 +129,7 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 }
 | TIPO_DE_DADOS ID IGUAL ID {
 	char *tipoFornecido = obterTipoDeDados($4); 
-	if(duplicado($2)) {
+	if(existeId($2)) {
 		erroIdentificadorDuplicado($2);
 	} else if(strcmp($1, obterTipoDeDados($4)) != 0) {
 		erroAtribuicao($1, tipoFornecido);
@@ -141,36 +142,54 @@ EXPRESSAO: TIPO_DE_DADOS ID {
 | error '>' {};
 
 ATRIBUICAO: ID IGUAL VALOR_NUMERICO {
-	char *tipoEsperado = obterTipoDeDados($1);
-	if(strcmp(tipoEsperado, "number") == 0) {
-    	atualizarValor($1, floatToAscii($3)); 
+	if (!existeId($1)) {
+		erroIdentificadorInexistente($1);
 	} else {
-		erroAtribuicao(tipoEsperado, "number");
+		char *tipoEsperado = obterTipoDeDados($1);
+		if(strcmp(tipoEsperado, "number") != 0) {
+			erroAtribuicao(tipoEsperado, "number");
+		} else {
+    		atualizarValor($1, floatToAscii($3)); 
+		}
 	}
 }
 | ID IGUAL VALOR_TEXTUAL {
-	char *tipoEsperado = obterTipoDeDados($1);
-	if(strcmp(tipoEsperado, "text") == 0) {
-    	atualizarValor($1, $3); 
+	if (!existeId($1)) {
+		erroIdentificadorInexistente($1);
 	} else {
-		erroAtribuicao(tipoEsperado, "text");
+		char *tipoEsperado = obterTipoDeDados($1);
+		if (strcmp(tipoEsperado, "text") != 0) {
+			erroAtribuicao(tipoEsperado, "text");
+		} else {
+    		atualizarValor($1, $3);
+		}
 	}
 }
 | ID IGUAL EXPRESSAO_NUMERICA {
-	char *tipoEsperado = obterTipoDeDados($1);
-	if(strcmp(tipoEsperado, "number") == 0) {
-    	atualizarValor($1, floatToAscii($3)); 
+	if (!existeId($1)) {
+		erroIdentificadorInexistente($1);
 	} else {
-		erroAtribuicao(tipoEsperado, "number");
+		char *tipoEsperado = obterTipoDeDados($1);
+		if (strcmp(tipoEsperado, "number") != 0) {
+			erroAtribuicao(tipoEsperado, "number");
+		} else {
+    		atualizarValor($1, floatToAscii($3));
+		} 
 	}
 }
 | ID IGUAL ID {
-	char *tipoEsperado = obterTipoDeDados($1); 
-	char *tipoFornecido = obterTipoDeDados($3); 
-	if(strcmp(obterTipoDeDados($1), obterTipoDeDados($3)) == 0) {
-    	atualizarValor($1, obterValor($3)); 
-	} else {
-		erroAtribuicao(tipoEsperado, tipoFornecido);
+	if (!existeId($1)) {
+		erroIdentificadorInexistente($1);
+	} else if (!existeId($3)) {
+		erroIdentificadorInexistente($3);
+	} else { 
+		char *tipoEsperado = obterTipoDeDados($1); 
+		char *tipoFornecido = obterTipoDeDados($3); 
+		if (strcmp(tipoEsperado, tipoFornecido) != 0) {
+			erroAtribuicao(tipoEsperado, tipoFornecido);
+		} else {
+    		atualizarValor($1, obterValor($3));
+		}
 	}
 };
 
@@ -226,7 +245,7 @@ LISTA_DE_PARAMETROS: ID
 | error '>' {};
 
 FUNCAO_DECLARACAO: TIPO_DE_DADOS ID ABRE_PARENTESES LISTA_DE_TIPOS_DE_DADOS FECHA_PARENTESES {
-    if(!duplicado($2)) {
+    if(!existeId($2)) {
 		salvarIdentificador($2, obterTiposDeDados());
     } else {
 		erroIdentificadorDuplicado($2);
