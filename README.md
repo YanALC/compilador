@@ -1,6 +1,6 @@
 # COMPILADOR                                                                 
 
-## Compilador feito com as bibliotecas LEX e YACC da linguagem C.
+## Compilador feito com as bibliotecas FLEX e BISON da linguagem C.
 
 ### Para dar build no projeto tenha o LEX ou o FLEX e o YACC ou o BISON instalados.
 ### Os comandos são os seguintes (entre na pasta `src`): 
