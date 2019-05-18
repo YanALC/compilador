@@ -15,13 +15,4 @@
 ### Para rodar o comando é: `.\calc.exe` ou `.\calc`.
 - Se for rodar com arquivo o comando é o seguinte: `type arquivo.txt | .\calc.exe`
 
-## Tipos de dados: `number` e `text`
-## Comando de print: `print <var | op_aritmetica | literal>;`
-## Parser reconhece:
-- if
-- else
-- for
-- while
-- declaração e manuseio de variáveis
-- declaração de funções
-- operações aritméticas
+## Comando de print: `print <var | op_aritmetica>;`
