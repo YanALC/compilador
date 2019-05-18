@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_COMPILADOR_TAB_H_INCLUDED
-# define YY_YY_COMPILADOR_TAB_H_INCLUDED
+#ifndef YY_YY_CALC_TAB_H_INCLUDED
+# define YY_YY_CALC_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -45,40 +45,20 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    VIRGULA = 258,
-    APOSTROFE = 259,
-    PONTO_VIRGULA = 260,
-    IGUAL = 261,
-    SOMA = 262,
-    SUBTRACAO = 263,
-    DIVISAO = 264,
-    MULTIPLICACAO = 265,
-    INC_DEC = 266,
-    IGUAL_IGUAL = 267,
-    DIFERENTE = 268,
-    NEGACAO = 269,
-    MENOR = 270,
-    MAIOR = 271,
-    MENOR_IGUAL = 272,
-    MAIOR_IGUAL = 273,
-    AND = 274,
-    OR = 275,
-    ABRE_PARENTESES = 276,
-    FECHA_PARENTESES = 277,
-    ABRE_CHAVE = 278,
-    FECHA_CHAVE = 279,
-    ABRE_COLCHETE = 280,
-    FECHA_COLCHETE = 281,
-    IF = 282,
-    ELSE = 283,
-    WHILE = 284,
-    FOR = 285,
-    PRINT = 286,
-    SAIR = 287,
-    VALOR_NUMERICO = 288,
-    VALOR_TEXTUAL = 289,
-    TIPO_DE_DADOS = 290,
-    ID = 291
+    PRINT = 258,
+    EXIT = 259,
+    EQUAL = 260,
+    PLUS = 261,
+    MINUS = 262,
+    MUL = 263,
+    MOD = 264,
+    DIV = 265,
+    POW = 266,
+    SEMICOLON = 267,
+    OPEN_PARENTHESIS = 268,
+    CLOSE_PARENTHESIS = 269,
+    NUMBER = 270,
+    ID = 271
   };
 #endif
 
@@ -87,13 +67,10 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 37 "compilador.y" /* yacc.c:1910  */
+#line 15 "calc.y" /* yacc.c:1910  */
+char *id; float num;
 
-	float numVal;
-	char *tipoDeDados;
-	char *txtVal;
-
-#line 97 "compilador.tab.h" /* yacc.c:1910  */
+#line 74 "calc.tab.h" /* yacc.c:1910  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -106,4 +83,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_COMPILADOR_TAB_H_INCLUDED  */
+#endif /* !YY_YY_CALC_TAB_H_INCLUDED  */
